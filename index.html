@@ -13,16 +13,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
-    <meta name="author" content="John Doe">
+    <meta name="author" content="gavin">
     <meta name="renderer" content="webkit">
-    <meta name="copyright" content="John Doe">
+    <meta name="copyright" content="gavin">
     
     <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>fi3ework&#39;s Studio</title>
+    <title>gavin&#39;s home</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -359,17 +359,18 @@ height:50vh;
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2019/11/15/Flutter%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87/" >
+        <a class="abstract-title" href = "/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/" >
             
-                <span>Flutter入门之安装篇</span>
+                <span>Dart之异步</span>
         </a>
         <div class="abstract-content">
-            ##写作背景Flutter作为跨平台技术的后起者，由于它独有的设计理念备受世人关注。作为一个客户端从业人员去拥抱这一新的技术是很有必要的，在经过一番查阅资料和自学之后，决定将自己的学习历程分享出来。这个系列会持续很长时间，定期更新。而最终的目标是利用市面上的一些免费的，流行的公用api来搭建一个完整的flutter模式的app。希望可以和大家一起加油。##文章简介这篇文章并不是什么很深的原理篇，实践篇啥的，而是很简单的安装篇，因为在程序员的世界里流传着这么一句话: talking is cheap,show me the code。所以直接动手就完了，原理什么的在后续会和大家一起分享。本...
+            在iOS开发过程中，我们经常会需要操作一些耗时操作，比如网络请求，从本地数据库读取数据等。而我们经常用到的方法就是开启一个子线程，将这些操作放到这个子线程里面操作，而不影响主线程的性能，当这些操作有返回的时候再回到主线程进行页面的刷新等。但是在Dart开发中，是没有多线程这个概念的，只有单线程，那么在处理一些耗时较长的操作的时候，Dart是如何处理的呢？
+Dart中的单线程isolate在Dart开发中，并没有像其他语言中的多线程的概念，而是多了一个类似的isolate概念。它有独立内存空间，也有一条时刻都在处理数据的事件处理循环(event loop)。我们可以把它看成有独立空间的线程...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/11/15</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/12/09</span>
             </div>
             <!-- tags  -->
             
@@ -594,12 +595,12 @@ height:50vh;
     
     
     
-    <div class="archive-year"> Invalid date </div>
+    <div class="archive-year"> 2019 </div>
     <ul class="year-list">
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/11/15/Flutter%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87/" >Flutter入门之安装篇</a>
+            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/" >Dart之异步</a>
         </li>
     
     </div>
@@ -649,7 +650,7 @@ jsonContent:
     <script>
     var siteMeta = {
         root: "/",
-        author: "John Doe"
+        author: "gavin"
     }
 </script>
     <!-- CDN failover -->

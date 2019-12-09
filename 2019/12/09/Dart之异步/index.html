@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="gavin">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="gavin">
+    
+    <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>Dart之异步 · gavin&#39;s home</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/favicon.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >gavin&#39;s home.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">Dart之异步</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>gavin's home.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            Dart之异步
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count word-count">2.2k</span>Reading time: <span class="post-count reading-time">8 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2019/12/09</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>在iOS开发过程中，我们经常会需要操作一些耗时操作，比如网络请求，从本地数据库读取数据等。而我们经常用到的方法就是开启一个子线程，将这些操作放到这个子线程里面操作，而不影响主线程的性能，当这些操作有返回的时候再回到主线程进行页面的刷新等。但是在Dart开发中，是没有多线程这个概念的，只有单线程，那么在处理一些耗时较长的操作的时候，Dart是如何处理的呢？</p>
+<h2 id="Dart中的单线程"><a href="#Dart中的单线程" class="headerlink" title="Dart中的单线程"></a>Dart中的单线程</h2><h3 id="isolate"><a href="#isolate" class="headerlink" title="isolate"></a>isolate</h3><p>在Dart开发中，并没有像其他语言中的多线程的概念，而是多了一个类似的<strong>isolate</strong>概念。<br>它有独立内存空间，也有一条时刻都在处理数据的事件处理循环(event loop)。我们可以把它看成有独立空间的线程。如下图所示，绿色的格子空间代表内存。红色箭头代表event loop。<br><img src="https://raw.githubusercontent.com/gavinyf/images/master/2.png" alt=""></p>
+<p>当然了，我们也可以自己创建一个新的isolate，用<em>Isolate.spawn()</em> 或者 <em>Flutter’s compute()</em>的方式，新创建出来的isolate有自己的内存空间和event loop.<br>而两个isolate之间的信息传递只能通过其他特殊的方式。<br><img src="https://raw.githubusercontent.com/gavinyf/images/master/1.png" alt=""></p>
+<h3 id="event-loop"><a href="#event-loop" class="headerlink" title="event loop"></a>event loop</h3><p>Dart中的事件处理有很多，如触摸处理，网络数据处理，滑动处理等，都需要交给event loop来处理。<br><img src="https://raw.githubusercontent.com/gavinyf/images/master/0_xlxALlxjazVifRep.png" alt=""></p>
+<p>上图左侧的不同颜色的多边形代表的就是需要处理的不同类型的事件，右边代表的就是event loop。</p>
+<h2 id="Dart中的异步操作"><a href="#Dart中的异步操作" class="headerlink" title="Dart中的异步操作"></a>Dart中的异步操作</h2><h3 id="future"><a href="#future" class="headerlink" title="future"></a>future</h3><p>说到Dart的异步操作就不能不提到一个名词：future。</p>
+<p><strong>那么什么是future呢？</strong><br>future本质上就是一个对象，但这个对象呢？有两种状态，一种是Uncompleted状态，一种是Completed的状态，而Completed的状态又分为两种，一种是真实的value值，一直就是通用的error。举个很简单的例子：<em>Future&lt; String &gt;</em> 这个类所对应的value值就是字符串。如下图所示：<br><img src="https://raw.githubusercontent.com/gavinyf/images/master/3.png" alt=""><br>我来举个例子，假如现在我们点击一个按钮，然后去发起请求一张图片的网络请求，然后再把这张图片显示出来。这是我们平时遇到最多的需要进行异步加载的情形，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">RaisedButton(</span><br><span class="line">  onPressed: () &#123;</span><br><span class="line">    final myFuture = http.get(&apos;https://my.image.url&apos;);</span><br><span class="line">    myFuture.then((resp) &#123;</span><br><span class="line">      setImage(resp);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  child: Text(&apos;Click me!&apos;),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>接下里我们来拆分这个问题：</p>
+<ol>
+<li>按钮点击。</li>
+<li>发送请求。</li>
+<li>请求返回，处理数据。</li>
+</ol>
+<p>我们要完成这个操作是需要三步的，而在我们的event loop中就属于三个不同的event需要处理。我们处理异步这个关键的地方就是我们要说的future对象。在我们发出处理完第二步的时候，event loop会给我们返回一个盒子，盒子里是啥我们不知道，然后再第三步数据返回的时候，event loop会将一张图片放在这个盒子里面，如果你想处理这张图片，那么你就的注册一下<em>then</em>这个block。在这个block里面对返回的图片进行操作。在这个例子当中，这个盒子就是我们上文提到的future。在这个这个value就是那张图片。<br><strong>如何创建future呢？</strong><br>目前主要有两种方式可以得到future，一种就是系统的api，比如http网络请求库,我们上面的代码。另一种方式就是我们自己创建，代码如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void main() &#123;</span><br><span class="line">  final myFuture = Future(() &#123;</span><br><span class="line">    return 12;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void main() &#123;</span><br><span class="line">  final myFuture = Future.value(12);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们除了可以创建有值的future的话还可以模拟创建包含错误的future：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void main() &#123;</span><br><span class="line">  final myFuture = Future.error(ArgumentError.notNull(&apos;input&apos;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们在上面第一段代码里面再加一句话来更加详细说明一下异步操作的过程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void main() &#123;</span><br><span class="line">  final myFuture = Future(() &#123;</span><br><span class="line">    print(&apos;Creating the future.&apos;); // 2.</span><br><span class="line">    return 12;</span><br><span class="line">  &#125;);</span><br><span class="line">  print(&apos;Done with main().&apos;); // 1.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码后一句会先打印，而前一句会后打印，为什么呢？就像我们之前说的那样，Dart本身是单线程的，所以需要进行的操作都是一个一个接着放入event loop中进行。Future用构造函数创建的时候，一开始返回的其实就是一个uncompleted future，就好比如说是：“你好，这里有一个封闭的箱子，你先拿着，待会我会放点东西进去，然后你再打开”，就是这么简单。这是第一个需要处理的event，然后接下来进行的是<code>print(&#39;Done with main().&#39;);</code>这句代码。再然后呢？我们就放了一个为12的数据进去了。有时候网络请求返回的可能是个错误，也就是说我们手里拿着的这个盒子里面的东西不是我们真正想要的值，那我们该怎么办呢？我们可以跟处理正常的value一样，注册一个block来处理，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">void main() &#123;</span><br><span class="line">  Future.delayed(</span><br><span class="line">    Duration(seconds: 3),</span><br><span class="line">    () =&gt; throw &apos;Error!&apos;, // 放个error进盒子里.</span><br><span class="line">  ).then((value) &#123;</span><br><span class="line">    print(value);</span><br><span class="line">  &#125;).catchError((err) &#123;</span><br><span class="line">    print(&apos;Caught $err&apos;); // 处理这个错误.</span><br><span class="line">  &#125;);</span><br><span class="line">  print(&apos;Waiting for a value...&apos;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有一种block，我们可以注册，那就是当future盒子里面有东西了，无论这个东西是个值还是个错误。<br>如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void main() &#123;</span><br><span class="line">  Future.delayed(</span><br><span class="line">    Duration(seconds: 3),</span><br><span class="line">    () =&gt; throw &apos;Error!&apos;, // 放个error进盒子里.</span><br><span class="line">  ).then((value) &#123;</span><br><span class="line">    print(value);</span><br><span class="line">  &#125;).catchError((err) &#123;</span><br><span class="line">    print(&apos;Caught $err&apos;); // 处理这个错误.</span><br><span class="line">  &#125;).whenComplete()&#123;</span><br><span class="line">     print(&apos;完成了！&apos;);</span><br><span class="line">  &#125;;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>说到了这里，我们大致弄清楚了Dart异步操作的一些基本原理和简单操作，那么为什么我们还需要<strong>await</strong>和<strong>async</strong>呢？</p>
+<h3 id="await和async"><a href="#await和async" class="headerlink" title="await和async"></a>await和async</h3><p>我们通过一个比较简单的例子来阐述下为什么我们需要用到await和async，以及用这两个关键词的好处。<br>假设我们现在有三个操作，分别是从本地数据库取用户id，然后再用这个用户id去远程服务器上获取对应的用户数据，最后我们再对这个获取到的用户数据进行处理显示在界面上：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">getIDFromDisk（）//从本地获取用户id</span><br><span class="line">FetchDataFromNetWorkWithId（String id）//根据id去远程服务器取用户数据</span><br><span class="line">processData() 处理数据</span><br></pre></td></tr></table></figure>
+<p>由于前两个操作都是耗时的操作，所以我们会用到future这个对象。伪完整的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;ProcessData&gt; createData()&#123;</span><br><span class="line">  return getIDFromDisk().then((id)&#123;</span><br><span class="line">    return  FetchDataFromNetWorkWithId(id)</span><br><span class="line">  &#125;).then((data)&#123;</span><br><span class="line">     return ProcessData(data);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码看上去是不是很复杂，这样还挺好的，没有对返回的错误进行注册处理。而且这还只是两个耗时的操作，就得注册两个<em>then()</em> 的回调。如果是多个呢？那么代码的可读性就会很差。这个时候我们为了代码看起来可读性更好的时候，并且让异步的代码看起来像同步一样，await和async就发挥出作用了<br>在运用这两个关键字之前，我们先简单的说明几个概念：</p>
+<ul>
+<li>同步操作：一个同步操作会阻塞其他操作，直到它完成。</li>
+<li>同步方法：一个同步方法里只能执行同步操作。</li>
+<li>异步操作：一旦调用成功，一个异步操作可以允许其他操作在其没完成的时候执行。</li>
+<li>异步方法：一个异步方法里面不仅可以执行同步操作，也可以执行异步操作。</li>
+</ul>
+<p>根据官网的解释，await和async的基本用法如下：</p>
+<ul>
+<li>async是为了将方法标注为异步方法。</li>
+<li>而await只能用在异步方法中(async标注的方法)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void main() async &#123; ··· &#125;</span><br></pre></td></tr></table></figure>
+<p>如果有返回值的话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;void&gt; main() async &#123; ··· &#125;</span><br></pre></td></tr></table></figure>
+<p>而await主要就是放在调用的异步方法前，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">await createOrderMessage()</span><br></pre></td></tr></table></figure>
+<p>我们现在将之前的代码用await和async重新写一遍：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Future&lt;ProcessData&gt; createData() async&#123;</span><br><span class="line">      String id = await getIDFromDisk();</span><br><span class="line">      Data data = await FetchDataFromNetWorkWithId(id)</span><br><span class="line">      return ProcessData(data);</span><br><span class="line">      </span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>这样看上去是要简洁了许多，并且看上去像是在同步调用一样。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>Dart中没有多线程的概念，而是isolate。</li>
+<li>Dart中处理事件的方式是event loop。</li>
+<li>为了可以做到异步操作，Dart引入了future对象，也就是盒子概念。</li>
+<li>await和async的引入是为了让异步操作看上去像同步操作，且提高代码的可读性。</li>
+</ul>
+
+    </article>
+    <!-- license  -->
+    
+        <div class="license-wrapper">
+            <p>Author：<a href="http://esthery.cn">gavin</a>
+            <p>原文链接：<a href="http://esthery.cn/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/">http://esthery.cn/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/</a>
+            <p>发表日期：<a href="http://esthery.cn/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/">December 9th 2019, 4:35:39 pm</a>
+            <p>更新日期：<a href="http://esthery.cn/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/">December 9th 2019, 4:42:38 pm</a>
+            <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+        </div>
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:gavin_taotao@163.com" target="_blank" rel="noopener" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="//github.com/gavinyf" class="iconfont-archer github" target="_blank" title=github></a>
+            
+        
+    
+        
+            
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Dart中的单线程"><span class="toc-number">1.</span> <span class="toc-text">Dart中的单线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#isolate"><span class="toc-number">1.1.</span> <span class="toc-text">isolate</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#event-loop"><span class="toc-number">1.2.</span> <span class="toc-text">event loop</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dart中的异步操作"><span class="toc-number">2.</span> <span class="toc-text">Dart中的异步操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#future"><span class="toc-number">2.1.</span> <span class="toc-text">future</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#await和async"><span class="toc-number">2.2.</span> <span class="toc-text">await和async</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 1
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2019 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/" >Dart之异步</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "gavin"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

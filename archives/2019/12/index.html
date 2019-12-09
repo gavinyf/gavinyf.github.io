@@ -13,16 +13,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
-    <meta name="author" content="John Doe">
+    <meta name="author" content="gavin">
     <meta name="renderer" content="webkit">
-    <meta name="copyright" content="John Doe">
+    <meta name="copyright" content="gavin">
     
     <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
     
     <meta name="description" content="">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>Flutter入门之安装篇 · fi3ework&#39;s Studio</title>
+    <title>gavin&#39;s home</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -203,23 +203,12 @@
 </head>
 
     
-        <body class="post-body">
-    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
-    
-    <div class="banner">
-            <div class="blog-title">
-                <a href="/" >gavin&#39;s home.</a>
-            </div>
-            <div class="post-title">
-                <a href="#" class="post-name">Flutter入门之安装篇</a>
-            </div>
-    </div>
     
     <a class="home-link" href=/>gavin's home.</a>
 </header>
@@ -231,68 +220,24 @@
 
 
 
-
-height:50vh;
 ">
     
     <!-- 主页  -->
-    
-    
-    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/intro/post-bg.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
-            
-            Flutter入门之安装篇
-            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
-            
-            <!-- 404 -->
-            
         </p>
         <!-- 文章页meta -->
-        
-            <div class="post-intros">
-                <!-- 文章页标签  -->
-                
-                
-                    <div class="post-intro-read">
-                        <span>Word count: <span class="post-count word-count">1.2k</span>Reading time: <span class="post-count reading-time">4 min</span></span>
-                    </div>
-                
-                <div class="post-intro-meta">
-                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
-                    <span class="post-intro-time">2019/11/15</span>
-                    
-                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
-                        <span class="iconfont-archer">&#xe602;</span>
-                        <span id="busuanzi_value_page_pv"></span>
-                    </span>
-                    
-                    <span class="shareWrapper">
-                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
-                        <span class="shareText">Share</span>
-                        <ul class="shareList">
-                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
-                                <div class="share-qrcode"></div>
-                            </li>
-                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
-                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
-                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
-                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
-                        </ul>
-                    </span>
-                </div>
-            </div>
         
     </div>
 </div>
@@ -393,62 +338,34 @@ height:50vh;
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main post-page">
-    <article class="article-entry">
-        <p>##写作背景<br>Flutter作为跨平台技术的后起者，由于它独有的设计理念备受世人关注。作为一个客户端从业人员去拥抱这一新的技术是很有必要的，在经过一番查阅资料和自学之后，决定将自己的学习历程分享出来。这个系列会持续很长时间，定期更新。而最终的目标是利用市面上的一些免费的，流行的公用api来搭建一个完整的flutter模式的app。希望可以和大家一起加油。<br>##文章简介<br>这篇文章并不是什么很深的原理篇，实践篇啥的，而是很简单的安装篇，因为在程序员的世界里流传着这么一句话: talking is cheap,show me the code。所以直接动手就完了，原理什么的在后续会和大家一起分享。本文中所要描述的flutter安装过程，环境主要是Mac版本，毕竟作为一名iOS从业者，这是必不可少的。那么闲话不多说，开始吧！</p>
-<p>##安装过程<br>由于网络上已经有了一大堆flutter如何安装的介绍。所以我一开始就在纠结到底要不要再写一篇相关的介绍。但最后想着别人写的那毕竟是别人的，自己踩得坑还是记录一下比较好。</p>
-<h3 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h3><p>由于在国内访问Flutter可能会受到限制，所以Flutter官方搭建了临时镜像。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export PUB_HOSTED_URL=https://pub.flutter-io.cn</span><br><span class="line">export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn</span><br><span class="line">export ANDROID_HOME=&quot;/Users/gavin/Library/Android/sdk&quot; </span><br><span class="line">export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/tools</span><br><span class="line">export PATH=$&#123;PATH&#125;:$&#123;ANDROID_HOME&#125;/platform-tools</span><br></pre></td></tr></table></figure>
-<p>ANDROID_HOME存储的是我本地sdk的路径，大家可以自行替换。<br>以上代码我一般都会放到bash_profile这个文件里面。<br>注意：由于Mac电脑是类Unix系统，所以有关这些配置文件的使用大部分都是一样，放在bash_profile这个文件是考虑到一般都是对Mac当前用户有效，在用户的目录下。<br>如果熟悉vim的话可以用vim编辑，而我一般都直接打开。<br><code>open ~/.bash_profile</code><br>打开之后直接复制就行了。然后再关闭，但这个时候是不起作用的，我们得手动调用下<br><code>source ~/.bash_profile</code><br>###下载Flutter库<br>flutter库文件下载有两个方式：</p>
-<ol>
-<li>一个是直接去官网下载指定的版本：<a href="https://flutter.io/sdk-archive/#macos" target="_blank" rel="noopener">下载页地址</a>。</li>
-<li>另一种就是去<a href="https://github.com/flutter/flutter.git" target="_blank" rel="noopener">github</a>上直接clone一份下来。<br>我个人比较推荐第二种方式，因为我们后续可以切换不同的分支来升级或者降级Flutter的版本。由于Dart语言是和Flutter绑定的。在下载完Flutter包之后会直接附带对应版本的Dart语言。</li>
-<li>为了能够在终端可以直接调用Flutter命令，我门需要将其添加到对应PATH中去<code>export PATH=PATH_TO_FLUTTER_GIT_DIRECTORY/flutter/bin:$PATH</code><br>注意：可以仿照添加添加环境变量的方式。然后将PATH_TO_FLUTTER_GIT_DIRECTORY替换为你本地下载的Flutter的地址，我一般都会放在桌面如”/Users/gavin/Desktop/Flutters”。<br>###安装依赖库<br>在添加完环境变量以及下载完Flutter库之后我们就可以在终端运行Flutter doctor来查看有哪些需要安装的依赖库。由于lutter调试是需要用到模拟器的，那么也就需要Android和iOS两端的依赖文件，一般情况直接按照出错提示来就好了，都可以安装成功。在安装完依赖之后，就可以安装编辑器了，我一般推荐用VSCode，主要由于它是免费的且体积小，可扩展性很高：<a href="https://code.visualstudio.com" target="_blank" rel="noopener">下载地址</a>。<br>下载完之后为了能够对Flutter有个很好的支持，我们需要下载对应的扩展包。如下图：</li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/gavinyf/images/master/img/20191119103222.jpg" alt=""></p>
-<p>有两个扩展库可以需要安装：Flutter和Dart。<br>###创建Demo工程<br>创建Flutter demo工程一般有两种方式一种是直接命令行创建，一种是编辑器（VSCode）创建。</p>
-<ol>
-<li>直接在终端运行 flutter create projectName就会在当前文件夹下面直接生成名字为“projectName”的Flutter项目。</li>
-<li>直接打开VSCode command+shift+p打开 直接输入flutter就会有提示了。<br>创建完之后用VSCode打开代码目录如下：</li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/gavinyf/images/master/20191119155433.jpg" alt=""></p>
-<p>这个时候我们可以在VSCode中，command+shift+p 根据提示在iOS模拟器上运行Flutter项目,如图:<br><img src="https://raw.githubusercontent.com/gavinyf/images/master/20191119170350.jpg" alt=""></p>
-<p>##总结<br>总体来说安装Flutter的开发环境不算困难，直接跟着步骤一步一步走就行了。在创建后开发环境之后，接下来要做的就是熟悉开发语言Dart。其实要想进行简单的Flutter页面的开发，Dart语言稍微熟悉下就可以了。不会影响后续的开发效率。</p>
-
-    </article>
-    <!-- license  -->
+            <main class="main index-page">
     
-        <div class="license-wrapper">
-            <p>Author：<a href="http://yoursite.com">John Doe</a>
-            <p>原文链接：<a href="http://yoursite.com/2019/11/15/Flutter%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87/">http://yoursite.com/2019/11/15/Flutter%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87/</a>
-            <p>发表日期：<a href="http://yoursite.com/2019/11/15/Flutter%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87/">November 15th 2019, 3:17:10 pm</a>
-            <p>更新日期：<a href="http://yoursite.com/2019/11/15/Flutter%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87/">December 6th 2019, 8:07:23 pm</a>
-            <p>版权声明：本文采用<a rel="license noopener" href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/" >
+            
+                <span>Dart之异步</span>
+        </a>
+        <div class="abstract-content">
+            在iOS开发过程中，我们经常会需要操作一些耗时操作，比如网络请求，从本地数据库读取数据等。而我们经常用到的方法就是开启一个子线程，将这些操作放到这个子线程里面操作，而不影响主线程的性能，当这些操作有返回的时候再回到主线程进行页面的刷新等。但是在Dart开发中，是没有多线程这个概念的，只有单线程，那么在处理一些耗时较长的操作的时候，Dart是如何处理的呢？
+Dart中的单线程isolate在Dart开发中，并没有像其他语言中的多线程的概念，而是多了一个类似的isolate概念。它有独立内存空间，也有一条时刻都在处理数据的事件处理循环(event loop)。我们可以把它看成有独立空间的线程...
         </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2019/12/09</span>
+            </div>
+            <!-- tags  -->
+            
+        </div>
+    </article>
     
     <!-- paginator  -->
-    <ul class="post-paginator">
-        <li class="next">
-            
-        </li>
-        <li class="previous">
-            
-        </li>
-    </ul>
-    <!-- 评论插件 -->
-    <!-- 来必力City版安装代码 -->
-
-<!-- City版安装代码已完成 -->
     
-    
-    <!-- partial('_partial/comment/changyan') -->
-    <!--PC版-->
-
-
-    
-    
-
-    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -534,24 +451,6 @@ height:50vh;
     </div>
     <!-- toc -->
     
-    <div class="toc-wrapper" style=
-    
-
-
-
-
-
-
-
-top:50vh;
-
-    >
-        <div class="toc-catalog">
-            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
-        </div>
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#添加环境变量"><span class="toc-number">1.</span> <span class="toc-text">添加环境变量</span></a></li></ol>
-    </div>
-    
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
     <ul class="sidebar-tabs sidebar-tabs-active-0">
@@ -586,12 +485,12 @@ top:50vh;
     
     
     
-    <div class="archive-year"> Invalid date </div>
+    <div class="archive-year"> 2019 </div>
     <ul class="year-list">
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">Invalid date</span><a class="archive-post-title" href= "/2019/11/15/Flutter%E5%85%A5%E9%97%A8%E4%B9%8B%E5%AE%89%E8%A3%85%E7%AF%87/" >Flutter入门之安装篇</a>
+            <span class="archive-post-date">12/09</span><a class="archive-post-title" href= "/2019/12/09/Dart%E4%B9%8B%E5%BC%82%E6%AD%A5/" >Dart之异步</a>
         </li>
     
     </div>
@@ -641,7 +540,7 @@ jsonContent:
     <script>
     var siteMeta = {
         root: "/",
-        author: "John Doe"
+        author: "gavin"
     }
 </script>
     <!-- CDN failover -->
@@ -664,8 +563,6 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
-    
-        <script src="/scripts/share.js" async></script>    
      
     </body>
 </html>
